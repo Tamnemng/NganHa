@@ -10,11 +10,12 @@
       margin: 0;
     }
     .container {
+      font-size: large;
       position: absolute;
       top: 0;
       left: 0;
-      height: 80%;
-      width: 30%;
+      height: 20%;
+      width: 60%;
       color: rgb(252, 24, 210);
       font-family: cursive;
     }
@@ -29,6 +30,8 @@
   <script type="module">
     import * as THREE from "https://cdn.skypack.dev/three@0.136.0";
     import { OrbitControls } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls";
+    import { FontLoader } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/loaders/FontLoader";
+    import { TextGeometry } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/geometries/TextGeometry";
 
     console.clear();
 
@@ -133,6 +136,26 @@
     p.rotation.z = 0.2;
     scene.add(p);
 
+    // Create the sun
+    let sunGeometry = new THREE.SphereGeometry(2, 32, 32);
+    let sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffdd44 });
+    let sun = new THREE.Mesh(sunGeometry, sunMaterial);
+    scene.add(sun);
+
+    // Load font and create text
+    const loader = new FontLoader();
+    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+      const textGeometry = new TextGeometry('Tom', {
+        font: font,
+        size: 0.5,
+        height: 0.1,
+      });
+      const textMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.set(-0.5, 0.5, 2.01); // Adjust position to place on the sun
+      scene.add(textMesh);
+    });
+
     let clock = new THREE.Clock();
 
     renderer.setAnimationLoop(() => {
@@ -145,7 +168,7 @@
 
     // Typing effect
     var i = 0;
-    var txt1 = "Sagi yêu dấu, <Nhưng không hề đầu gấu. <<Sagi babi, <Nhưng không hề chi li. <<Sagi thân mến, <Nhưng không thích chơi nến. <<Sagi slay... <Chắc là có straight. <<Sagi Sagi, <Cái tên thật mê li, mê li.";
+    var txt1 = "Chị biết không, Ngân Hà ơi?< Tâm là mặt trời, còn chị là cả dải Ngân Hà.< Chúng ta sinh ra là để thuộc về nhau,<như vũ trụ đã sắp đặt.";
     var speed = 50;
 
     function typeWriter() {
