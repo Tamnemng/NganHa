@@ -17,7 +17,7 @@
       height: 20%;
       width: 60%;
       color: rgb(252, 24, 210);
-      font-family:'Times New Roman', Times, serif;
+      font-family: 'Times New Roman', Times, serif;
     }
   </style>
 </head>
@@ -155,6 +155,31 @@
       textMesh.position.set(-0.5, 0.5, 2.01); // Adjust position to place on the sun
       scene.add(textMesh);
     });
+
+    // Texture loader
+    const textureLoader = new THREE.TextureLoader();
+    const imageTexture = textureLoader.load('Ha.jpeg'); // Replace with your image URL
+    const imageMaterial = new THREE.MeshBasicMaterial({ map: imageTexture });
+    const imageGeometry = new THREE.PlaneGeometry(4, 4);
+    const imageMesh = new THREE.Mesh(imageGeometry, imageMaterial);
+    imageMesh.position.set(0, 4, 0);
+    imageMesh.visible = false;
+    scene.add(imageMesh);
+
+    // Raycaster for detecting clicks
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    
+    function onClick(event) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(sun);
+      if (intersects.length > 0) {
+        imageMesh.visible = !imageMesh.visible;
+      }
+    }
+    window.addEventListener('click', onClick);
 
     let clock = new THREE.Clock();
 
